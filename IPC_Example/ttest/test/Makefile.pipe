@@ -1,0 +1,42 @@
+CC = gcc
+CC_FLAGS = -g -Wall
+PWD = pwd
+#OBJS = $(SRCS:.c=.o)
+
+TARGET =	ipc_pipe
+
+#SUBDIRS =	SjLib\
+
+DIR_SRC = src
+
+LIBS =		-lpthread\
+#			-lSjLib\
+
+#LIB_DIRS =	-LSjLib\
+
+INC =		-Iinclude\
+#			-ISjLib/include\
+
+SRCS =		$(DIR_SRC)/main.c \
+			$(DIR_SRC)/ptestA.c \
+			$(DIR_SRC)/ptestB.c \
+
+OBJS = 		main.o\
+			ptestA.o\
+			ptestB.o\
+
+all : $(TARGET)
+
+$(TARGET) :
+	@for d in $(SUBDIRS); do $(MAKE) -C $$d; done
+	$(CC) -c $(SRCS) $(INC)
+	$(CC) -o $(TARGET) $(OBJS) $(LIB_DIRS) $(LIBS)
+	rm -f *.o
+
+install: $(TARGET)
+	cp $(TARGET) ../PKG
+
+clean :
+	@for d in $(SUBDIRS); do $(MAKE) -C $$d clean; done
+	rm -f $(TARGET)
+	rm -f *.o

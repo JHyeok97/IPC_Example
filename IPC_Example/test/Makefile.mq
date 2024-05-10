@@ -1,0 +1,43 @@
+CC = gcc
+CC_FLAGS = -g -Wall
+PWD = pwd
+#OBJS = $(SRCS:.c=.o)
+
+TARGET =	ipc_mq
+
+#SUBDIRS =	SjLib\
+
+DIR_SRC = mq_src
+
+LIBS =		-lpthread\
+#			-lSjLib\
+
+#LIB_DIRS =	-LSjLib\
+
+INC =		-Iinclude\
+#			-ISjLib/include\
+
+SRCS =		$(DIR_SRC)/main.c \
+			$(DIR_SRC)/mq_testA.c \
+			$(DIR_SRC)/mq_testB.c \
+
+OBJS = 		main.o\
+			mq_testA.o\
+			mq_testB.o\
+
+all : $(TARGET)
+
+$(TARGET) :
+	@for d in $(SUBDIRS); do $(MAKE) -C $$d; done
+	$(CC) -c $(SRCS) $(INC)
+	$(CC) -o $(TARGET) $(OBJS) $(LIB_DIRS) $(LIBS)
+	rm -f *.o
+
+install: $(TARGET)
+	cp $(TARGET) ../PKG
+
+clean :
+	@for d in $(SUBDIRS); do $(MAKE) -C $$d clean; done
+	rm -f $(TARGET)
+	rm -f *.o
+	
